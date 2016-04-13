@@ -32,28 +32,34 @@
 
 
 - (PDFStreeingWheelOfDirection)compareStartPoint:(CGPoint)poinx otherPoint:(CGPoint)otherPoint{
-    
-    if (poinx.x < otherPoint.x) {
-       
-        self->moveSpeed = otherPoint.x - poinx.x;
+
+    //NSLog(@"**************%@**************",NSStringFromCGPoint(self->imageView.center));
+
+    //横纵轴标的比例
+    float persent = self.bounds.size.width/self.bounds.size.height;
+
+    if ((poinx.x < otherPoint.x) && (otherPoint.x < (otherPoint.y * persent))) {
+
+        //右半轴拖动的比例 0.0--1.0
+        self->moveSpeed = (otherPoint.x - poinx.x)/(self.bounds.size.width/2);
         return PDFSteeringWheelDirection_right;
     }
     
-    else if (poinx.x > otherPoint.x){
+    else if ((poinx.x > otherPoint.x) && (otherPoint.x > (otherPoint.y * persent))){
         
-        self->moveSpeed = poinx.x - otherPoint.x;
+        self->moveSpeed = (poinx.x - otherPoint.x)/(self.bounds.size.width/2);
         return PDFSteeringWheelDirection_left;
     }
     
-    else if (poinx.y < otherPoint.y){
+    else if ((poinx.y < otherPoint.y) && (otherPoint.x < (otherPoint.y * persent))){
         
-        self->moveSpeed = otherPoint.y - poinx.y;
+        self->moveSpeed = (otherPoint.y - poinx.y)/(self.bounds.size.width/2);
         return PDFSteeringWheelDirection_down;
     }
     
-    else if (poinx.y > otherPoint.y){
+    else if ((poinx.y > otherPoint.y) && (otherPoint.x > (otherPoint.y * persent))){
         
-        self->moveSpeed = poinx.y - otherPoint.y;
+        self->moveSpeed = (poinx.y - otherPoint.y)/(self.bounds.size.height/2);
         return PDFSteeringWheelDirection_up;
     }
     
@@ -113,8 +119,27 @@
 - (void)setMoveDirection:(PDFStreeingWheelOfDirection)moveDirection{
     
     //    self.moveDirection = moveDirection;
-    
-    NSLog(@"方向  %ld",(long)moveDirection);
+    switch (moveDirection) {
+        case PDFSteeringWheelDirection_down:
+            NSLog(@"下");
+            break;
+
+        case PDFSteeringWheelDirection_left:
+            NSLog(@"左");
+            break;
+
+        case PDFSteeringWheelDirection_right:
+            NSLog(@"右");
+            break;
+
+        case PDFSteeringWheelDirection_up:
+            NSLog(@"上");
+            break;
+
+        default:
+            NSLog(@"默认。。。");
+            break;
+    }
 }
 
 

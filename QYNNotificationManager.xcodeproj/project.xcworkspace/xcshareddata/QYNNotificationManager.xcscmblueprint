@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "5E011043ECB8455E6C0D094A30D56723B92451F1",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "5E011043ECB8455E6C0D094A30D56723B92451F1" : 0,
+    "340C15712BE36B094055E446A247EC929E15CBE1" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "04E13093-EA27-406E-9DFD-83FDA4ACCDF8",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "5E011043ECB8455E6C0D094A30D56723B92451F1" : "YNHandShank\/",
+    "340C15712BE36B094055E446A247EC929E15CBE1" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "QYNNotificationManager",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "QYNNotificationManager.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Qiyun2014\/SourceTree_managerFile.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "340C15712BE36B094055E446A247EC929E15CBE1"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Qiyun2014\/YNHandShank.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5E011043ECB8455E6C0D094A30D56723B92451F1"
+    }
+  ]
+}

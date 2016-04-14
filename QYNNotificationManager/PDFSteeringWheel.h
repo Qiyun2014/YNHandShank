@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, PDFStreeingWheelOfDirection)  {
     
     @public
     CGRect      aFrame;         //  范围
-    float       moveSpeed;      //  移动速度
+    float       moveSpeed;      //  移动速度(0.0--1.0)
     UIImageView *imageView;     //  底图
     UIImage     *dirImage;      //  方位图片
     

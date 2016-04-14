@@ -34,36 +34,35 @@
 - (PDFStreeingWheelOfDirection)compareStartPoint:(CGPoint)poinx otherPoint:(CGPoint)otherPoint{
 
     //NSLog(@"**************%@**************",NSStringFromCGPoint(self->imageView.center));
-
+    //NSLog(@"斜长  %f",hypot(self.bounds.size.width,self.bounds.size.height));
+    
     //横纵轴标的比例
     float persent = self.bounds.size.width/self.bounds.size.height;
 
-    if ((poinx.x < otherPoint.x) && (otherPoint.x < (otherPoint.y * persent))) {
-
-        //右半轴拖动的比例 0.0--1.0
-        self->moveSpeed = (otherPoint.x - poinx.x)/(self.bounds.size.width/2);
-        return PDFSteeringWheelDirection_right;
-    }
-    
-    else if ((poinx.x > otherPoint.x) && (otherPoint.x > (otherPoint.y * persent))){
+    if ((otherPoint.y > otherPoint.x / persent) && (self.bounds.size.width - otherPoint.x) / persent < otherPoint.y) {
         
-        self->moveSpeed = (poinx.x - otherPoint.x)/(self.bounds.size.width/2);
-        return PDFSteeringWheelDirection_left;
-    }
-    
-    else if ((poinx.y < otherPoint.y) && (otherPoint.x < (otherPoint.y * persent))){
-        
-        self->moveSpeed = (otherPoint.y - poinx.y)/(self.bounds.size.width/2);
+        self->moveSpeed = (otherPoint.y - poinx.y)/(self.bounds.size.height/2);
         return PDFSteeringWheelDirection_down;
     }
     
-    else if ((poinx.y > otherPoint.y) && (otherPoint.x > (otherPoint.y * persent))){
+    else if ((otherPoint.y < otherPoint.x / persent) && (self.bounds.size.width - otherPoint.x) / persent > otherPoint.y){
         
         self->moveSpeed = (poinx.y - otherPoint.y)/(self.bounds.size.height/2);
         return PDFSteeringWheelDirection_up;
     }
     
-    return PDFSteeringWheelDirection_default;
+    else if ((otherPoint.y > otherPoint.x / persent) && (self.bounds.size.width - otherPoint.x) / persent > otherPoint.y){
+        
+        self->moveSpeed = (poinx.x - otherPoint.x)/(self.bounds.size.width/2);
+        return PDFSteeringWheelDirection_left;
+    }
+    
+    else if ((otherPoint.y < otherPoint.x / persent) && (self.bounds.size.width - otherPoint.x) / persent < otherPoint.y){
+        
+        self->moveSpeed = (otherPoint.x - poinx.x)/(self.bounds.size.width/2);
+        return PDFSteeringWheelDirection_right;
+        
+    }else return PDFSteeringWheelDirection_default; //两个方向交界处
 }
 
 - (void)layoutSubviews{
@@ -120,20 +119,21 @@
     
     //    self.moveDirection = moveDirection;
     switch (moveDirection) {
+            
         case PDFSteeringWheelDirection_down:
-            NSLog(@"下");
+            NSLog(@"下  速度:%f",self->moveSpeed);
             break;
 
         case PDFSteeringWheelDirection_left:
-            NSLog(@"左");
+            NSLog(@"左  速度:%f",self->moveSpeed);
             break;
 
         case PDFSteeringWheelDirection_right:
-            NSLog(@"右");
+            NSLog(@"右  速度:%f",self->moveSpeed);
             break;
 
         case PDFSteeringWheelDirection_up:
-            NSLog(@"上");
+            NSLog(@"上  速度:%f",self->moveSpeed);
             break;
 
         default:
@@ -158,7 +158,7 @@
     
     if (CGRectContainsPoint(self.bounds, point)) {
         
-        NSLog(@"point = %@",NSStringFromCGPoint(point));
+       //NSLog(@"point = %@",NSStringFromCGPoint(point));
         
         self->handShankImageView.center = point;
         

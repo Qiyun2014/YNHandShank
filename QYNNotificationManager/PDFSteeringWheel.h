@@ -27,11 +27,12 @@ typedef NS_ENUM(NSInteger, PDFStreeingWheelOfDirection)  {
     
     @private
     UIImageView *handShankImageView; //手柄
-    UIDynamicAnimator *animator;
+    UIDynamicAnimator *animator;     //物理仿真行为
 }
 
 
 @property (nonatomic)PDFStreeingWheelOfDirection moveDirection;
+
 
 
 - (id)initWithFrame:(CGRect)frame backGroundColor:(UIColor *)color;

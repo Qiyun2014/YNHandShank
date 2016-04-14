@@ -21,7 +21,6 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     steeringWheelView = [[PDFSteeringWheel alloc] initWithFrame:CGRectMake(200, 200, 200, 140) backGroundColor:[UIColor blackColor]];
-    steeringWheelView.center = self.view.center;
     [self.view addSubview:steeringWheelView];
     
 }

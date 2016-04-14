@@ -14,6 +14,8 @@
 #define KPDFDirection_bgImage @"摇杆方位_@3x"
 #define KPDFDirection_hdShank @"摇杆_@3x"
 
+#pragma mark    -   layout subviews
+
 - (id)initWithFrame:(CGRect)frame backGroundColor:(UIColor *)color{
     
     if (self = [super initWithFrame:frame]) {
@@ -31,14 +33,33 @@
 }
 
 
-- (PDFStreeingWheelOfDirection)compareStartPoint:(CGPoint)poinx otherPoint:(CGPoint)otherPoint{
+- (void)layoutSubviews{
+    
+    [super layoutSubviews];
+    
+    CGFloat origin_x = (self.bounds.size.width - self->imageView.bounds.size.width)/2;
+    CGFloat origin_y = (self.bounds.size.height - self->imageView.bounds.size.height)/2;
+    
+    CGRect rect = self->aFrame;
+    rect.origin = CGPointMake(origin_x, origin_y);
+    self->imageView.frame = rect;
+    
+    CGRect rect2 = CGRectMake(0, 0, rect.size.height/2.5, rect.size.height/2.5);
+    self->handShankImageView.frame = rect2;
+    self->handShankImageView.center = self->imageView.center;
+}
 
+
+#pragma mark    -   private method
+
+- (PDFStreeingWheelOfDirection)compareStartPoint:(CGPoint)poinx otherPoint:(CGPoint)otherPoint{
+    
     //NSLog(@"**************%@**************",NSStringFromCGPoint(self->imageView.center));
     //NSLog(@"斜长  %f",hypot(self.bounds.size.width,self.bounds.size.height));
     
     //横纵轴标的比例
     float persent = self.bounds.size.width/self.bounds.size.height;
-
+    
     if ((otherPoint.y > otherPoint.x / persent) && (self.bounds.size.width - otherPoint.x) / persent < otherPoint.y) {
         
         self->moveSpeed = (otherPoint.y - poinx.y)/(self.bounds.size.height/2);
@@ -65,24 +86,6 @@
     }else return PDFSteeringWheelDirection_default; //两个方向交界处
 }
 
-- (void)layoutSubviews{
-    
-    [super layoutSubviews];
-    
-    CGFloat origin_x = (self.bounds.size.width - self->imageView.bounds.size.width)/2;
-    CGFloat origin_y = (self.bounds.size.height - self->imageView.bounds.size.height)/2;
-    
-    CGRect rect = self->aFrame;
-    rect.origin = CGPointMake(origin_x, origin_y);
-    self->imageView.frame = rect;
-    
-    CGRect rect2 = CGRectMake(0, 0, rect.size.height/2.5, rect.size.height/2.5);
-    self->handShankImageView.frame = rect2;
-    self->handShankImageView.center = self->imageView.center;
-}
-
-
-#pragma mark    -   private method
 
 - (UIImageView *)directionImageView{
     
@@ -149,10 +152,11 @@
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event{
     
     //创建碰撞行为
-    UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:@[self,self->handShankImageView]];
+    //UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:@[self->imageView,self->handShankImageView]];
     
     //设置碰撞边界，不设置就会飞出屏幕，设置就会在屏幕边框处产生碰撞效果
-    collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
+    //collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
+    //[collisionBehavior setTranslatesReferenceBoundsIntoBoundaryWithInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     
     CGPoint point = [[touches allObjects].lastObject locationInView:self];
     
@@ -164,22 +168,40 @@
         
         self.moveDirection = [self compareStartPoint:self->imageView.center otherPoint:point];
     }
+    
+    //[self->animator removeAllBehaviors];
+    //[self->animator addBehavior:collisionBehavior];
 }
 
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     
     self->handShankImageView.center = self->imageView.center;
+    
     /*
-    
     UISnapBehavior *snap = [[UISnapBehavior alloc]initWithItem:self->handShankImageView
-                                                   snapToPoint:CGPointApplyAffineTransform(self->imageView.center, CGAffineTransformMakeRotation(M_PI_2))];
-    
+                                                   snapToPoint:CGPointApplyAffineTransform(self->handShankImageView.center, CGAffineTransformMakeRotation(M_PI_2))];
     snap.damping = 0.2;
 
     [self->animator removeAllBehaviors];
     [self->animator addBehavior:snap];
     */
+    
+    NSInteger angle = random()%30;
+    
+    [UIView animateWithDuration:0.3
+                          delay:0
+         usingSpringWithDamping:0.1
+          initialSpringVelocity:0.5
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         
+                         self->handShankImageView.transform = CGAffineTransformScale(CGAffineTransformMakeRotation(M_PI/2), angle, angle);
+                         
+                     } completion:^(BOOL finished){
+                         
+                         self->handShankImageView.center = self->imageView.center;
+                     }];
 }
 
 /*

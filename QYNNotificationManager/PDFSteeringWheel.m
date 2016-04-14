@@ -191,8 +191,8 @@
     
     [UIView animateWithDuration:0.3
                           delay:0
-         usingSpringWithDamping:0.1
-          initialSpringVelocity:0.5
+         usingSpringWithDamping:0.4
+          initialSpringVelocity:0.3
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
                          

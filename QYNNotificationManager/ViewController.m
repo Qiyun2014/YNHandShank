@@ -11,6 +11,9 @@
 @interface ViewController ()
 {
     PDFSteeringWheel    *steeringWheelView;
+    UILabel     *_label;
+    
+    NSDate  *currentDate;
 }
 @end
 
@@ -20,9 +23,61 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    
     steeringWheelView = [[PDFSteeringWheel alloc] initWithFrame:CGRectMake(200, 200, 200, 140) backGroundColor:[UIColor blackColor]];
     [self.view addSubview:steeringWheelView];
+  
+    _label = [[UILabel alloc] initWithFrame:CGRectZero];
+    _label.textAlignment = NSTextAlignmentCenter;
+    _label.textColor = [UIColor redColor];
+    _label.text = @"00:00:00";
+    [self.view addSubview:_label];
+
+    currentDate = [NSDate date];
+    /*
+    NSMethodSignature *sgn = [self methodSignatureForSelector:@selector(onTick:)];
+    NSInvocation *inv = [NSInvocation invocationWithMethodSignature: sgn];
+    [inv setTarget: self];
+    [inv setSelector:@selector(onTick:)];
     
+    NSTimer *t = [NSTimer timerWithTimeInterval: 1.0
+                                     invocation:inv
+                                        repeats:YES];
+    //and after that, you start the timer manually whenever you need like this:
+    
+    NSRunLoop *runner = [NSRunLoop currentRunLoop];
+    [runner addTimer: t forMode: NSDefaultRunLoopMode];
+     */
+    
+    //dateWithTimeIntervalSinceNow: 60.0
+    NSDate *d = [NSDate dateWithTimeIntervalSinceNow: 1.0];
+    NSTimer *t = [[NSTimer alloc] initWithFireDate: d
+                                          interval: 1
+                                            target: self
+                                          selector:@selector(onTick:)
+                                          userInfo:nil repeats:YES];
+    
+    NSRunLoop *runner = [NSRunLoop currentRunLoop];
+    [runner addTimer:t forMode: NSDefaultRunLoopMode];
+}
+
+-(void)onTick:(NSTimer *)timer {
+    
+    //do something
+    //NSLog(@"%@",timer.fireDate);
+    _label.text = [self timeFormatted:[timer.fireDate timeIntervalSinceDate:currentDate]];
+    
+    //NSLog(@"间隔 %@",[self timeFormatted:[timer.fireDate timeIntervalSinceDate:currentDate]]);
+}
+
+- (NSString *)timeFormatted:(int)totalSeconds
+{
+    
+    int seconds = totalSeconds % 60;
+    int minutes = (totalSeconds / 60) % 60;
+    int hours = totalSeconds / 3600;
+    
+    return [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
 }
 
 - (void)viewWillLayoutSubviews{
@@ -30,6 +85,9 @@
     [super viewWillLayoutSubviews];
     
     steeringWheelView.center = self.view.center;
+    
+    _label.center = self.view.center;
+    _label.frame = CGRectOffset(steeringWheelView.frame, 0, 100);
 }
 
 - (void)didReceiveMemoryWarning {

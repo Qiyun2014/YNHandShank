@@ -10,10 +10,11 @@
 
 @interface ViewController ()
 {
-    PDFSteeringWheel    *steeringWheelView;
-    UILabel     *_label;
+    PDFCalibrationMagnetismView     *cmView;
+    PDFSteeringWheel                *steeringWheelView;
+    UILabel                         *_label;
     
-    NSDate  *currentDate;
+    NSDate                          *currentDate;
 }
 @end
 
@@ -23,6 +24,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+#if 1
+    cmView = [[PDFCalibrationMagnetismView alloc] initWithFrame:CGRectZero];
+    cmView.title = @"请远离金属或带磁、带电物体，并使飞行器离地1.5米左右的距离";
+    cmView.cmType = PDLCalibrationMagnetism_default;
+    [self.view addSubview:cmView];
+    
+#else
     
     steeringWheelView = [[PDFSteeringWheel alloc] initWithFrame:CGRectMake(200, 200, 200, 140) backGroundColor:[UIColor blackColor]];
     [self.view addSubview:steeringWheelView];
@@ -32,6 +40,8 @@
     _label.textColor = [UIColor redColor];
     _label.text = @"00:00:00";
     [self.view addSubview:_label];
+    
+#endif
 
     currentDate = [NSDate date];
     /*
@@ -65,14 +75,13 @@
     
     //do something
     //NSLog(@"%@",timer.fireDate);
-    _label.text = [self timeFormatted:[timer.fireDate timeIntervalSinceDate:currentDate]];
     
+    _label.text = [self timeFormatted:[timer.fireDate timeIntervalSinceDate:currentDate]];
     //NSLog(@"间隔 %@",[self timeFormatted:[timer.fireDate timeIntervalSinceDate:currentDate]]);
 }
 
 - (NSString *)timeFormatted:(int)totalSeconds
 {
-    
     int seconds = totalSeconds % 60;
     int minutes = (totalSeconds / 60) % 60;
     int hours = totalSeconds / 3600;
@@ -83,6 +92,8 @@
 - (void)viewWillLayoutSubviews{
     
     [super viewWillLayoutSubviews];
+    
+    cmView.frame = self.view.bounds;
     
     steeringWheelView.center = self.view.center;
     

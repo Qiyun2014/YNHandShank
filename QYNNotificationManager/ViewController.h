@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PDFSteeringWheel.h"
+#import "PDFCalibrationMagnetismView.h"
 
 @interface ViewController : UIViewController
 

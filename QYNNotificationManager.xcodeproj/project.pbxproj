@@ -10,6 +10,7 @@
 		FA5EAE431CBDF9C9008148EF /* PDFSteeringWheel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5EAE421CBDF9C9008148EF /* PDFSteeringWheel.m */; };
 		FA5EAE451CBE0ACF008148EF /* 摇杆方位_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA5EAE441CBE0ACF008148EF /* 摇杆方位_@3x.png */; };
 		FA5EAE471CBE0AD5008148EF /* 摇杆_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA5EAE461CBE0AD5008148EF /* 摇杆_@3x.png */; };
+		FA6143451CBF6CAE009B39A1 /* PDFCalibrationMagnetismView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6143441CBF6CAE009B39A1 /* PDFCalibrationMagnetismView.m */; };
 		FA6D29811CBB643C003D559E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6D29801CBB643C003D559E /* main.m */; };
 		FA6D29841CBB643C003D559E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6D29831CBB643C003D559E /* AppDelegate.m */; };
 		FA6D29871CBB643C003D559E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6D29861CBB643C003D559E /* ViewController.m */; };
@@ -42,6 +43,8 @@
 		FA5EAE421CBDF9C9008148EF /* PDFSteeringWheel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFSteeringWheel.m; sourceTree = "<group>"; };
 		FA5EAE441CBE0ACF008148EF /* 摇杆方位_@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "摇杆方位_@3x.png"; sourceTree = "<group>"; };
 		FA5EAE461CBE0AD5008148EF /* 摇杆_@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "摇杆_@3x.png"; sourceTree = "<group>"; };
+		FA6143431CBF6CAE009B39A1 /* PDFCalibrationMagnetismView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFCalibrationMagnetismView.h; sourceTree = "<group>"; };
+		FA6143441CBF6CAE009B39A1 /* PDFCalibrationMagnetismView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFCalibrationMagnetismView.m; sourceTree = "<group>"; };
 		FA6D297C1CBB643B003D559E /* QYNNotificationManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QYNNotificationManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA6D29801CBB643C003D559E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FA6D29821CBB643C003D559E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -116,6 +119,8 @@
 				FA6D29861CBB643C003D559E /* ViewController.m */,
 				FA5EAE411CBDF9C9008148EF /* PDFSteeringWheel.h */,
 				FA5EAE421CBDF9C9008148EF /* PDFSteeringWheel.m */,
+				FA6143431CBF6CAE009B39A1 /* PDFCalibrationMagnetismView.h */,
+				FA6143441CBF6CAE009B39A1 /* PDFCalibrationMagnetismView.m */,
 				FA6D29881CBB643C003D559E /* Main.storyboard */,
 				FA6D298B1CBB643C003D559E /* Assets.xcassets */,
 				FA6D298D1CBB643C003D559E /* LaunchScreen.storyboard */,
@@ -284,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA6D29871CBB643C003D559E /* ViewController.m in Sources */,
+				FA6143451CBF6CAE009B39A1 /* PDFCalibrationMagnetismView.m in Sources */,
 				FA5EAE431CBDF9C9008148EF /* PDFSteeringWheel.m in Sources */,
 				FA6D29841CBB643C003D559E /* AppDelegate.m in Sources */,
 				FA6D29811CBB643C003D559E /* main.m in Sources */,

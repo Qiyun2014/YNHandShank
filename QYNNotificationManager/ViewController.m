@@ -24,11 +24,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-#if 1
+#if 0
     cmView = [[PDFCalibrationMagnetismView alloc] initWithFrame:CGRectZero];
     cmView.title = @"请远离金属或带磁、带电物体，并使飞行器离地1.5米左右的距离";
     cmView.cmType = PDLCalibrationMagnetism_default;
     [self.view addSubview:cmView];
+    
+#elif 1
     
 #else
     
@@ -41,7 +43,6 @@
     _label.text = @"00:00:00";
     [self.view addSubview:_label];
     
-#endif
 
     currentDate = [NSDate date];
     /*
@@ -65,10 +66,14 @@
                                           interval: 1
                                             target: self
                                           selector:@selector(onTick:)
-                                          userInfo:nil repeats:YES];
+                                          userInfo:nil
+                                           repeats:YES];
     
     NSRunLoop *runner = [NSRunLoop currentRunLoop];
     [runner addTimer:t forMode: NSDefaultRunLoopMode];
+    
+#endif
+
 }
 
 -(void)onTick:(NSTimer *)timer {

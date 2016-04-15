@@ -12,8 +12,8 @@
 {
     PDFCalibrationMagnetismView     *cmView;
     PDFSteeringWheel                *steeringWheelView;
+    PDFVideoScreenView              *_videoSView;
     UILabel                         *_label;
-    
     NSDate                          *currentDate;
 }
 @end
@@ -31,6 +31,9 @@
     [self.view addSubview:cmView];
     
 #elif 1
+    
+    _videoSView = [[PDFVideoScreenView alloc] initWithFrame:CGRectZero titles:@"相机",@"云台", nil];
+    [self.view addSubview:_videoSView];
     
 #else
     
@@ -104,6 +107,10 @@
     
     _label.center = self.view.center;
     _label.frame = CGRectOffset(steeringWheelView.frame, 0, 100);
+    
+    {
+        _videoSView.frame = CGRectMake((self.view.bounds.size.width * 0.62), (self.view.bounds.size.height * 0.15), (self.view.bounds.size.width * 0.25), (self.view.bounds.size.height * 0.7));
+    }
 }
 
 - (void)didReceiveMemoryWarning {

@@ -23,23 +23,6 @@
 
 @implementation PDFCalibrationMagnetismView
 
-#define Iphone  ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-#define KPDLTitleAdding 8
-#define KPDLTitleHeightAdding 20
-
-#define KPDL_title_font_big     (Iphone?21:(21 + KPDLTitleAdding))
-#define KPDL_title_font_biggish (Iphone?19:(19 + KPDLTitleAdding))
-#define KPDL_title_font_default (Iphone?17:(17 + KPDLTitleAdding))
-#define KPDL_title_font_less    (Iphone?15:(15 + KPDLTitleAdding))
-#define KPDL_title_font_small   (Iphone?13:(13 + KPDLTitleAdding))
-
-#define KPDL_label_height_big       (Iphone?60:(60 + KPDLTitleHeightAdding))
-#define KPDL_label_height_biggish   (Iphone?50:(50 + KPDLTitleHeightAdding))
-#define KPDL_label_height_default   (Iphone?40:(40 + KPDLTitleHeightAdding))
-#define KPDL_label_height_less      (Iphone?30:(30 + KPDLTitleHeightAdding))
-#define KPDL_label_height_small     (Iphone?20:(20 + KPDLTitleHeightAdding))
-
-
 
 - (id)initWithFrame:(CGRect)frame{
     

@@ -8,13 +8,17 @@
 
 #import "ViewController.h"
 
+
 @interface ViewController ()
 {
     PDFCalibrationMagnetismView     *cmView;
     PDFSteeringWheel                *steeringWheelView;
-    PDFVideoScreenView              *_videoSView;
+    
+    PDFSteeringWheelView            *_wheelView;
     UILabel                         *_label;
     NSDate                          *currentDate;
+    
+    PDFRollView *rView;
 }
 @end
 
@@ -32,8 +36,12 @@
     
 #elif 1
     
-    _videoSView = [[PDFVideoScreenView alloc] initWithFrame:CGRectZero titles:@"相机",@"云台", nil];
-    [self.view addSubview:_videoSView];
+    _wheelView = [[PDFSteeringWheelView alloc] initWithFrame:CGRectZero
+                                              firstItemTitle:@"相机"
+                                              otherItemTitle:@"云台"
+                                               sectionTitles:@[@"云台方位",@"云台ROLL轴"]];
+    [self.view addSubview:_wheelView];
+    
     
 #else
     
@@ -108,9 +116,8 @@
     _label.center = self.view.center;
     _label.frame = CGRectOffset(steeringWheelView.frame, 0, 100);
     
-    {
-        _videoSView.frame = CGRectMake((self.view.bounds.size.width * 0.62), (self.view.bounds.size.height * 0.15), (self.view.bounds.size.width * 0.25), (self.view.bounds.size.height * 0.7));
-    }
+    _wheelView.frame = CGRectMake((self.view.bounds.size.width * 0.62), (self.view.bounds.size.height * 0.15), (self.view.bounds.size.width * 0.25), (self.view.bounds.size.height * 0.7));
+
 }
 
 - (void)didReceiveMemoryWarning {

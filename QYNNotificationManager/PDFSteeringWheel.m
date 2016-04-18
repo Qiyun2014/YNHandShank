@@ -8,11 +8,186 @@
 
 #import "PDFSteeringWheel.h"
 
-@implementation PDFSteeringWheel
+@interface PDFSteeringWheelView()
+
+@property (nonatomic, strong) PDFSteeringWheel  *steWheel;
+@property (nonatomic, strong) PDFRollView       *rollView;
+@property (nonatomic, copy)   NSArray *titles;
+
+@end
+
+@implementation PDFSteeringWheelView{
+    
+    /* 方位，ROLL */
+    UILabel  *subTitles[2];
+    
+    /* 相机，云台 */
+    UIButton *buttons[2];
+}
+
+- (id)initWithFrame:(CGRect)frame firstItemTitle:(NSString *)fTitle otherItemTitle:(NSString *)oTitle sectionTitles:(NSArray *)sectionTitles{
+    
+    if (self = [super initWithFrame:frame]) {
+        
+        self.backgroundColor = [UIColor blackColor];
+        self.frame = frame;
+        self.clipsToBounds = YES;
+        self.layer.cornerRadius = 4;
+        self.layer.borderWidth = 0.5;
+        self.layer.borderColor = [[UIColor whiteColor] CGColor];
+        self.layer.masksToBounds = YES;
+        
+        _titles = [NSArray arrayWithObjects:fTitle,oTitle, nil];
+        _sectionTitles = [sectionTitles copy];
+        [self loadView];
+    }
+    return self;
+}
+
+- (void)loadView{
+    
+    [_titles enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        buttons[idx] = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [buttons[idx] setTitle:obj forState:UIControlStateNormal];
+        [buttons[idx] setTitleColor:[UIColor orangeColor] forState:UIControlStateSelected];
+        [buttons[idx] titleLabel].font = [UIFont systemFontOfSize:KPDL_title_font_less];
+        [buttons[idx] setTitleColor:(idx==1)?[UIColor lightGrayColor]:[UIColor orangeColor] forState:UIControlStateNormal];
+    
+        [buttons[idx] addTarget:self action:@selector(transitionAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:buttons[idx]];
+    }];
+    
+    _steWheel = [[PDFSteeringWheel alloc] initWithFrame:CGRectZero backGroundColor:[UIColor clearColor]];
+    _rollView = [[PDFRollView alloc] initWithFrame:CGRectZero];
+    _rollView.backgroundColor       = [UIColor clearColor];
+    _rollView.delegate = self;
+    _steWheel.delegate = self;
+    [self addSubview:_steWheel];
+    [self addSubview:_rollView];
+    
+    if (!self.sectionTitles.count && self.sectionTitles.count < 2) return;
+    
+    /* 相机，云台 */
+    [self.sectionTitles enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        subTitles[idx] = [[UILabel alloc] init];
+        subTitles[idx].text             = obj;
+        subTitles[idx].textAlignment    = NSTextAlignmentLeft;
+        subTitles[idx].textColor        = [UIColor whiteColor];
+        subTitles[idx].font             = [UIFont boldSystemFontOfSize:KPDL_title_font_small];
+        [self addSubview:subTitles[idx]];
+    }];
+}
+
+- (void)layoutSubviews{
+    
+    [super layoutSubviews];
+    
+    _steWheel.frame = CGRectMake(0, KCurrentView_Height_(self)*0.28, KCurrentView_width_(self), KCurrentView_Height_(self)*0.4);
+    _rollView.frame = CGRectMake(0, KCurrentView_Height_(self)*0.83, KCurrentView_width_(self), KCurrentView_Height_(self)*0.17);
+    
+    
+    /* 切换按钮 */
+    [_titles enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        CGFloat wid = [PDFSteeringWheelView width:obj font:[UIFont systemFontOfSize:KPDL_title_font_less]].width;
+        buttons[idx].frame = CGRectMake(idx==0?(KCurrentView_width_(self)/2 - wid - 10):10 + KCurrentView_width_(self)/2, KPDL_label_height_lesser, wid, 20);
+    }];
+    
+    
+    /* 相机，云台位置布局 */
+    [self.sectionTitles enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        CGRect rect = CGRectOffset(((idx == 0)?_steWheel:_rollView).frame, 15, -KPDL_label_height_less);
+        rect.size.height = KPDL_label_height_small;
+        subTitles[idx].frame = rect;
+    }];
+}
+
+/**
+ *  切换设置(相机，云台)
+ */
+- (void)transitionAction:(UIButton *)sender{
+    
+    if ([sender isEqual:buttons[0]]) {  //相机
+        
+        [buttons[0] setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
+        [buttons[1] setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        
+    }else{  //云台
+        
+        [buttons[1] setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
+        [buttons[0] setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+}
 
 
-#define KPDFDirection_bgImage @"摇杆方位_@3x"
-#define KPDFDirection_hdShank @"摇杆_@3x"
+#pragma mark    -   delegate
+
+- (void)dragDirection:(PDFStreeingDirection)direction speed:(CGFloat)speed{
+    
+    switch (direction) {
+            
+        case PDFSteeringWheelDirection_down:
+            NSLog(@"下  速度:%f",speed);
+            break;
+            
+        case PDFSteeringWheelDirection_left:
+            NSLog(@"左  速度:%f",speed);
+            break;
+            
+        case PDFSteeringWheelDirection_right:
+            NSLog(@"右  速度:%f",speed);
+            break;
+            
+        case PDFSteeringWheelDirection_up:
+            NSLog(@"上  速度:%f",speed);
+            break;
+            
+        default:
+            NSLog(@"默认。。。");
+            break;
+    }
+}
+
+- (void)rollControl:(PDFRollSetting)setting rollView:(PDFRollView *)rollView{
+    
+    NSLog(@"******  %f",rollView.rollValue);
+}
+
+
++ (CGSize)width:(NSString *)str font:(UIFont *)font
+{
+    NSDictionary *attribute = @{NSFontAttributeName:font};
+    
+    CGSize size = [str boundingRectWithSize:CGSizeMake([[UIApplication sharedApplication] keyWindow].bounds.size.width, CGFLOAT_MAX)
+                                    options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                 attributes:attribute
+                                    context:nil].size;
+    
+    return size;
+}
+
+
+@end
+
+
+#pragma mark    -   Steering Wheel
+
+
+@implementation PDFSteeringWheel{
+    
+@public
+    float       moveSpeed;      //  移动速度(0.0--1.0)
+    UIImageView *imageView;     //  底图
+    UIImage     *dirImage;      //  方位图片
+    
+@private
+    UIImageView *handShankImageView; //手柄
+    UIDynamicAnimator *animator;     //物理仿真行为
+}
+
 
 #pragma mark    -   layout subviews
 
@@ -40,11 +215,13 @@
     CGFloat origin_x = (self.bounds.size.width - self->imageView.bounds.size.width)/2;
     CGFloat origin_y = (self.bounds.size.height - self->imageView.bounds.size.height)/2;
     
-    CGRect rect = self->aFrame;
+    CGRect rect = self.frame;
     rect.origin = CGPointMake(origin_x, origin_y);
     self->imageView.frame = rect;
+
+    //CGRect rect2 = CGRectMake(0, 0, rect.size.height/2.5, rect.size.height/2.5);
+    CGRect rect2 = CGRectInset(rect,rect.size.width/5,rect.size.width/5);
     
-    CGRect rect2 = CGRectMake(0, 0, rect.size.height/2.5, rect.size.height/2.5);
     self->handShankImageView.frame = rect2;
     self->handShankImageView.center = self->imageView.center;
 }
@@ -52,7 +229,7 @@
 
 #pragma mark    -   private method
 
-- (PDFStreeingWheelOfDirection)compareStartPoint:(CGPoint)poinx otherPoint:(CGPoint)otherPoint{
+- (PDFStreeingDirection)compareStartPoint:(CGPoint)poinx otherPoint:(CGPoint)otherPoint{
     
     //NSLog(@"**************%@**************",NSStringFromCGPoint(self->imageView.center));
     //NSLog(@"斜长  %f",hypot(self.bounds.size.width,self.bounds.size.height));
@@ -113,35 +290,13 @@
 
 #pragma mark    -   set/get
 
-- (void)setFrame:(CGRect)frame{
+
+- (void)setMoveDirection:(PDFStreeingDirection)moveDirection{
     
-    self->aFrame = frame;
-}
-
-- (void)setMoveDirection:(PDFStreeingWheelOfDirection)moveDirection{
+    //self.moveDirection = moveDirection;
     
-    //    self.moveDirection = moveDirection;
-    switch (moveDirection) {
-            
-        case PDFSteeringWheelDirection_down:
-            NSLog(@"下  速度:%f",self->moveSpeed);
-            break;
-
-        case PDFSteeringWheelDirection_left:
-            NSLog(@"左  速度:%f",self->moveSpeed);
-            break;
-
-        case PDFSteeringWheelDirection_right:
-            NSLog(@"右  速度:%f",self->moveSpeed);
-            break;
-
-        case PDFSteeringWheelDirection_up:
-            NSLog(@"上  速度:%f",self->moveSpeed);
-            break;
-
-        default:
-            NSLog(@"默认。。。");
-            break;
+    if ([self.delegate respondsToSelector:@selector(dragDirection:speed:)]) {
+        [self.delegate dragDirection:moveDirection speed:self->moveSpeed];
     }
 }
 
@@ -236,3 +391,118 @@
 */
 
 @end
+
+#pragma mark    -   Roll View
+
+
+@interface PDFRollView ()
+
+@property (nonatomic,strong) UIButton   *increaseButton;
+@property (nonatomic,strong) UIButton   *decreaseButton;
+@property (nonatomic,strong) UILabel    *valueLabel;
+
+@end
+
+#define KAttribute_button_(button)\
+button = [UIButton buttonWithType:UIButtonTypeRoundedRect];\
+[button addTarget:self action:@selector(sender:)\
+ forControlEvents:UIControlEventTouchUpInside];\
+[button titleLabel].font = [UIFont boldSystemFontOfSize:KPDL_title_font_most];\
+[button setTitleEdgeInsets:UIEdgeInsetsMake(-5, 0, 0, 0)];\
+[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];\
+[button layer].borderWidth = 1;\
+[button layer].borderColor = [[UIColor whiteColor] CGColor];\
+
+
+@implementation PDFRollView{
+    
+    CGFloat width,height;
+}
+
+- (id)initWithFrame:(CGRect)frame{
+    
+    if (self = [super initWithFrame:frame]) {
+        
+        self.frame = frame;
+        
+        [self addSubview:self.valueLabel];
+        [self addSubview:self.increaseButton];
+        [self addSubview:self.decreaseButton];
+    }
+    return self;
+}
+
+- (void)layoutSubviews{
+    
+    [super layoutSubviews];
+    width = self.bounds.size.width;
+    height = self.bounds.size.height;
+    
+    CGFloat space = KPDL_label_height_small;
+    self.valueLabel.frame = CGRectMake((width/2 - space), (height - KPDL_label_height_smaller)/2.7, space * 2, KPDL_label_height_smaller);
+    
+    self.increaseButton.frame = CGRectOffset(self.valueLabel.frame, -(width/4), 0);;
+    self.decreaseButton.frame = CGRectOffset(self.valueLabel.frame, (width/4), 0);
+}
+
+/* 点击增加或减少的相应事件 */
+- (void)sender:(UIButton *)sender{
+    
+    if (sender.tag == 77)   self.rollValue += 1;
+    else    self.rollValue -= 1;
+    
+    if ([self.delegate respondsToSelector:@selector(rollControl:rollView:)]) {
+        [self.delegate rollControl:(sender.tag==77)?PDFRollSettingIncrease:PDFRollSettingDecrease rollView:self];
+    }
+}
+
+/* RollValue的set方法 */
+- (void)setRollValue:(CGFloat)rollValue{
+    
+    self.valueLabel.text = [NSString stringWithFormat:@"%.0f",rollValue];
+    _rollValue = rollValue;
+}
+
+
+#pragma mark    -   get method
+
+- (UILabel *)valueLabel{
+    
+    if (!_valueLabel) {
+        
+        self.valueLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.valueLabel.textAlignment = NSTextAlignmentCenter;
+        self.rollValue = 0;
+        self.valueLabel.font = [UIFont systemFontOfSize:KPDL_title_font_less];
+        self.valueLabel.textColor = [UIColor whiteColor];
+    }
+    return _valueLabel;
+}
+
+- (UIButton *)increaseButton{
+    
+    if (!_increaseButton){
+    
+        KAttribute_button_(self.increaseButton);
+        [self.increaseButton setTitle:@"-" forState:UIControlStateNormal];
+    }
+    return _increaseButton;
+}
+
+- (UIButton *)decreaseButton{
+    
+    if (_increaseButton && !_decreaseButton) {
+        
+        //NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject: self.increaseButton];
+        //self.decreaseButton = [NSKeyedUnarchiver unarchiveObjectWithData: archivedData];
+        KAttribute_button_(self.decreaseButton);
+        [self.decreaseButton setTitle:@"+" forState:UIControlStateNormal];
+        [self.decreaseButton setTag:77];
+    }
+    
+    return _decreaseButton;
+}
+
+@end
+
+

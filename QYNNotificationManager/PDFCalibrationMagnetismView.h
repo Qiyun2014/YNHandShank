@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PDFLayoutDefine.h"
 
 typedef NS_ENUM(NSInteger, PDLCalibrationMagnetismType) {
     
